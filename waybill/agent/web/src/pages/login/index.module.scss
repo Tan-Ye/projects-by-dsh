@@ -1,0 +1,44 @@
+@use '@/styles/mixins' as *;
+
+// 登录页：单卡片居中。间距全部取 4 的倍数。
+
+.page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background: var(--wb-bg);
+}
+
+.card {
+  width: 380px;
+  padding: 8px;
+}
+
+.title {
+  margin-bottom: 4px;
+}
+
+.subtitle {
+  margin-bottom: 24px;
+}
+
+.alert {
+  margin-bottom: 16px;
+}
+
+.hint {
+  margin-top: 24px;
+  padding-top: 16px;
+  border-top: 1px solid var(--wb-border);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.hintRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}

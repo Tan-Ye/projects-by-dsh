@@ -1,0 +1,27 @@
+.page {
+  padding: 16px 24px 32px;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+
+.title {
+  margin: 0 !important;
+}
+
+.filters {
+  margin-bottom: 16px;
+}
+
+.alert {
+  margin-bottom: 16px;
+}
+
+.table {
+  background: #fff;
+  border-radius: var(--fin-radius);
+}

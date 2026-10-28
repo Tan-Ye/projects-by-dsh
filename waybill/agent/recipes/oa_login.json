@@ -1,0 +1,67 @@
+{
+    "name": "oa_login",
+    "version": 1,
+    "base_url": "http://127.0.0.1:8100",
+    "steps": [
+        {
+            "seq": 1,
+            "intent": "打开 OA 登录页",
+            "action": "goto",
+            "url": "/login"
+        },
+        {
+            "seq": 2,
+            "intent": "填入制单人账号",
+            "action": "fill",
+            "target": {
+                "by": "name",
+                "value": "username"
+            },
+            "value": "zhangwei"
+        },
+        {
+            "seq": 3,
+            "intent": "填入密码",
+            "action": "fill",
+            "target": {
+                "by": "name",
+                "value": "password"
+            },
+            "value": "oa123456"
+        },
+        {
+            "seq": 4,
+            "intent": "点击登录按钮",
+            "action": "click",
+            "target": {
+                "by": "css",
+                "value": "button[type=submit]"
+            }
+        },
+        {
+            "seq": 5,
+            "intent": "确认已进入待办列表",
+            "action": "expect_url",
+            "pattern": "**/todo**",
+            "asserts": [
+                {
+                    "kind": "text",
+                    "target": {
+                        "by": "css",
+                        "value": "h2"
+                    },
+                    "contains": "我的待办"
+                }
+            ]
+        },
+        {
+            "seq": 6,
+            "intent": "读取待办表格行数",
+            "action": "count",
+            "target": {
+                "by": "css",
+                "value": "table.grid tr"
+            }
+        }
+    ]
+}

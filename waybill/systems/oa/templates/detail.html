@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<title>报销明细 - {{ doc.doc_no }}</title>
+<link rel="stylesheet" href="/static/oa.css">
+</head>
+<body class="frame">
+<table class="grid">
+  <tr>{% for col in columns %}<th>{{ col.title }}</th>{% endfor %}</tr>
+  {%- for row in rows %}
+  <tr>{% for cell in row %}<td{% if cell.cls %} class="{{ cell.cls }}"{% endif %}>{{ cell.text }}</td>{% endfor %}</tr>
+  {%- endfor %}
+</table>
+
+{% if pages > 1 %}
+<div class="pager">
+  第 {{ page_no }} / {{ pages }} 页
+  {% if page_no > 1 %}<a href="?p={{ page_no - 1 }}">上一页</a>{% endif %}
+  {% if page_no < pages %}<a href="?p={{ page_no + 1 }}">下一页</a>{% endif %}
+</div>
+{% endif %}
+
+<div class="atts">
+  {%- for a in atts %}
+  <div class="att-item">
+    <img src="/attachment/{{ a.id }}" title="{{ a.filename }}">
+    <div class="cap">附件 {{ loop.index }}</div>
+  </div>
+  {%- endfor %}
+</div>
+<div class="frame-foot">附件为扫描件，如字迹不清请联系申请人。 · <a href="/doc/{{ doc.doc_no }}" target="_top">返回单据</a></div>
+</body>
+</html>

@@ -1,0 +1,15 @@
+{
+  "id": "T5",
+  "name": "t5_mapping_missing",
+  "recipe": "oa_read_doc",
+  "inputs": {
+    "doc_no": "BX-2024-1011"
+  },
+  "expect": {
+    "status": "waiting_human",
+    "reason_code": "MAPPING_MISSING",
+    "voucher": {
+      "exists": false
+    }
+  }
+}

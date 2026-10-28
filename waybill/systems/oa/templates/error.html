@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block title %}{{ heading }}{% endblock %}
+{% block content %}
+<div class="panel">
+  <h2>{{ heading }}</h2>
+  <div class="notice">
+    {{ message }}
+    <p><a href="/todo">返回待办列表</a></p>
+  </div>
+</div>
+{% endblock %}

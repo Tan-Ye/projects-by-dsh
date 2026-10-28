@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% block title %}待办工作 - OA 协同办公系统{% endblock %}
+{% block content %}
+<div class="panel">
+  <h2>我的待办（共 {{ total }} 条）</h2>
+
+  {# 筛选条件全部是链接：每个筛选状态都有自己的 URL，可重放、可审计 #}
+  <div class="filters">
+    <a href="/todo" class="{% if not status_filter %}cur{% endif %}">全部</a>
+    {% for code, text in statuses %}
+    <a href="/todo?status={{ code }}" class="{% if status_filter == code %}cur{% endif %}">{{ text }}</a>
+    {% endfor %}
+  </div>
+
+  <table class="grid">
+    <tr>
+      <th>单号</th><th>申请人</th><th>部门</th><th>事由</th><th>金额</th><th>状态</th><th>提交时间</th><th>操作</th>
+    </tr>
+    {% for d in rows %}
+    <tr>
+      <td>{{ d.doc_no }}</td>
+      <td>{{ d.applicant }}</td>
+      <td>{{ d.department }}</td>
+      <td>{{ d.reason }}</td>
+      <td class="num">{{ d.total_cents|yuan }}</td>
+      <td>{{ STATUS_TEXT[d.status] }}</td>
+      <td>{{ d.submitted_at }}</td>
+      <td><a href="/doc/{{ d.doc_no }}">查看</a></td>
+    </tr>
+    {% endfor %}
+  </table>
+
+  {# 分页条总是渲染：只有一页也显示，抽取端不必判断"有没有分页" #}
+  <div class="pager">
+    第 {{ page_no }} / {{ pages }} 页
+    {% if page_no > 1 %}<a href="/todo?status={{ status_filter }}&page={{ page_no - 1 }}">上一页</a>{% else %}<span class="off">上一页</span>{% endif %}
+    {% for p in range(1, pages + 1) %}
+      {% if p == page_no %}<span class="cur">{{ p }}</span>{% else %}<a href="/todo?status={{ status_filter }}&page={{ p }}">{{ p }}</a>{% endif %}
+    {% endfor %}
+    {% if page_no < pages %}<a href="/todo?status={{ status_filter }}&page={{ page_no + 1 }}">下一页</a>{% else %}<span class="off">下一页</span>{% endif %}
+  </div>
+</div>
+{% endblock %}

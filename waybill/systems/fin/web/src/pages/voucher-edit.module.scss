@@ -1,0 +1,99 @@
+@use '../styles/mixins' as *;
+
+.page {
+  padding: 16px 24px 32px;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+
+.title {
+  margin: 0 !important;
+}
+
+.voucherNo {
+  color: var(--fin-text-secondary);
+}
+
+.alert {
+  margin-bottom: 16px;
+}
+
+.errorList {
+  margin: 0;
+  padding-left: 16px;
+}
+
+.card {
+  padding: 16px;
+  background: #fff;
+  border-radius: var(--fin-radius);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  margin-bottom: 24px;
+
+  @include sm {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  color: var(--fin-text-secondary);
+}
+
+.wide {
+  grid-column: span 2;
+}
+
+.error {
+  color: var(--fin-danger);
+}
+
+.lines {
+  border-top: 1px solid #f0f0f0;
+  padding-top: 16px;
+}
+
+.linesHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+  font-weight: 500;
+}
+
+.lineRow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 0;
+}
+
+.lineAccount {
+  width: 260px;
+}
+
+.lineCenter {
+  width: 180px;
+}
+
+.lineAmount {
+  width: 120px;
+}
+
+.lineSummary {
+  flex: 1;
+  min-width: 160px;
+}

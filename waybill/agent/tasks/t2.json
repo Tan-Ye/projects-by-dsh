@@ -1,0 +1,17 @@
+{
+  "id": "T2",
+  "name": "t2_read_oa_doc",
+  "recipe": "oa_read_doc",
+  "inputs": {
+    "doc_no": "BX-2024-0930"
+  },
+  "expect": {
+    "status": "succeeded",
+    "voucher": {
+      "status": "draft",
+      "validated": true,
+      "lines": 3,
+      "total_yuan": 1693.0
+    }
+  }
+}

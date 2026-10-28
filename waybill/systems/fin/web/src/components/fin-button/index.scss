@@ -1,0 +1,12 @@
+// 公共组件用全局类名 + 前缀，不用 CSS Module——外部要能通过 .fin-btn 稳定命中
+
+.fin-btn {
+  &__text {
+    display: inline-block;
+  }
+
+  &--loading {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+}

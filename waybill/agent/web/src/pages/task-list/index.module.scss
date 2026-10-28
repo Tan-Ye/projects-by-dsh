@@ -1,0 +1,25 @@
+@use '@/styles/mixins' as *;
+
+.page {
+  @include stack(16px);
+}
+
+.toolbar {
+  border: 1px solid var(--wb-border);
+}
+
+.search {
+  width: 260px;
+}
+
+.alert {
+  margin: 0;
+}
+
+.tableCard {
+  border: 1px solid var(--wb-border);
+}
+
+.clickableRow {
+  cursor: pointer;
+}

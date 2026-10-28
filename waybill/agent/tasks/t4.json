@@ -1,0 +1,17 @@
+{
+  "id": "T4",
+  "name": "t4_attachments",
+  "recipe": "oa_read_doc",
+  "inputs": {
+    "doc_no": "BX-2024-1005"
+  },
+  "expect": {
+    "status": "succeeded",
+    "voucher": {
+      "status": "draft",
+      "validated": true,
+      "lines": 2,
+      "total_yuan": 460.0
+    }
+  }
+}

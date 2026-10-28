@@ -1,0 +1,23 @@
+// 公共 mixin 与断点。这是 partial，不产出 CSS；
+// 页面用 `@use '@/styles/mixins' as *;` 引入。
+
+$bp-tablet: 1024px;
+$bp-mobile: 720px;
+
+@mixin card-surface {
+  background: var(--wb-surface);
+  border-radius: 8px;
+  border: 1px solid var(--wb-border);
+}
+
+@mixin ellipsis {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+@mixin stack($gap: 16px) {
+  display: flex;
+  flex-direction: column;
+  gap: $gap;
+}

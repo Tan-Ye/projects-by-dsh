@@ -1,0 +1,36 @@
+.wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100%;
+  padding: 24px;
+}
+
+.card {
+  width: 100%;
+  max-width: 400px;
+  border-radius: var(--fin-radius);
+}
+
+.title {
+  margin-bottom: 4px !important;
+}
+
+.subtitle {
+  margin-bottom: 16px !important;
+}
+
+.alert {
+  margin-bottom: 16px;
+}
+
+.label {
+  display: block;
+  margin-bottom: 16px;
+  color: var(--fin-text-secondary);
+
+  :global(.ant-input-affix-wrapper),
+  :global(.ant-input) {
+    margin-top: 4px;
+  }
+}

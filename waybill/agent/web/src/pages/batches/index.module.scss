@@ -1,0 +1,17 @@
+@use '@/styles/mixins' as *;
+
+.page {
+  @include stack(16px);
+}
+
+.card {
+  border: 1px solid var(--wb-border);
+}
+
+.toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 16px;
+}

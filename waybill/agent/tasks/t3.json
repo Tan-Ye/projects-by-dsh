@@ -1,0 +1,17 @@
+{
+  "id": "T3",
+  "name": "t3_duplicate_doc",
+  "recipe": "oa_read_doc",
+  "fixture": "T3",
+  "inputs": {
+    "doc_no": "BX-2024-0912"
+  },
+  "expect": {
+    "status": "waiting_human",
+    "reason_code": "DUPLICATE_DOC",
+    "voucher": {
+      "status": "submitted",
+      "lines": 1
+    }
+  }
+}

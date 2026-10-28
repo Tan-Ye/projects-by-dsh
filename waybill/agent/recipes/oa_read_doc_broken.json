@@ -1,0 +1,67 @@
+{
+    "name": "oa_read_doc_broken",
+    "version": 1,
+    "base_url": "http://127.0.0.1:8100",
+    "requires": [
+        "doc_no"
+    ],
+    "steps": [
+        {
+            "seq": 1,
+            "intent": "打开指定的报销单",
+            "action": "goto",
+            "url": "/doc/{{doc_no}}"
+        },
+        {
+            "seq": 2,
+            "intent": "确认打开的就是这张单子",
+            "action": "count",
+            "target": {
+                "by": "css",
+                "value": "table.form tr"
+            },
+            "asserts": [
+                {
+                    "kind": "text",
+                    "target": {
+                        "by": "css",
+                        "value": "body"
+                    },
+                    "contains": "{{doc_no}}"
+                }
+            ]
+        },
+        {
+            "seq": 3,
+            "intent": "读取单据头（单号、部门、事由、附单据数）",
+            "action": "extract_kv_table",
+            "target": {
+                "by": "css",
+                "value": "table.form"
+            },
+            "as": "doc"
+        },
+        {
+            "seq": 4,
+            "intent": "读取报销明细表",
+            "action": "extract_table",
+            "in_frame": true,
+            "target": {
+                "by": "css",
+                "value": "table.grid-old"
+            },
+            "as": "lines"
+        },
+        {
+            "seq": 5,
+            "intent": "确认明细没有分页（有分页说明只读了第一页）",
+            "action": "expect_absent",
+            "in_frame": true,
+            "target": {
+                "by": "css",
+                "value": "div.pager"
+            }
+        }
+    ],
+    "fixture": true
+}

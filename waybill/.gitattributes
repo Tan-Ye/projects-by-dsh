@@ -1,0 +1,7 @@
+# 仓库内统一 LF：Windows 上编辑也不提交 CRLF，避免整文件假 diff
+* text=auto eol=lf
+
+# 明确按二进制处理，不让 git 尝试合并或转换
+*.png binary
+*.jpg binary
+*.ico binary

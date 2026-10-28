@@ -1,0 +1,44 @@
+{
+  "name": "waybill-conventions",
+  "version": "0.1.0",
+  "description": "分层代码规范：general 可复用，project 只属于本仓库",
+  "layers": ["general", "project"],
+  "levels": ["rules", "brief", "full"],
+  "languages": {
+    "python": {
+      "general": {
+        "rules": "general/python/rules.md",
+        "brief": "general/python/brief.md",
+        "full": "general/python/full.md"
+      },
+      "project": "project/python.md"
+    },
+    "sql": {
+      "general": {
+        "rules": "general/sql/rules.md",
+        "brief": "general/sql/brief.md",
+        "full": "general/sql/full.md"
+      },
+      "project": "project/sql.md"
+    },
+    "frontend": {
+      "general": {
+        "style": {
+          "rules": "general/frontend/style/rules.md",
+          "brief": "general/frontend/style/brief.md",
+          "full": "general/frontend/style/full.md"
+        },
+        "structure": {
+          "rules": "general/frontend/structure/rules.md",
+          "brief": "general/frontend/structure/brief.md",
+          "full": "general/frontend/structure/full.md"
+        }
+      },
+      "project": "project/frontend.md"
+    }
+  },
+  "publish": {
+    "include": ["general", "README.md", "manifest.json", "CHANGELOG.md"],
+    "exclude": ["project"]
+  }
+}

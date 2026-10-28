@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<title>{% block title %}OA 协同办公系统{% endblock %}</title>
+<link rel="stylesheet" href="/static/oa.css">
+</head>
+<body>
+<div class="topbar">
+  <span class="brand">OA 协同办公系统</span>
+  {% if username %}
+  <span class="who">{{ username }} &nbsp;|&nbsp; <a href="/logout">退出</a></span>
+  {% endif %}
+</div>
+<div class="wrap">
+{% block content %}{% endblock %}
+</div>
+</body>
+</html>

@@ -1,0 +1,5 @@
+Traceback (most recent call last):
+  File "D:\tasks\projects-by-dsh\waybill\systems\fin\run.py", line 15, in <module>
+    import uvicorn  # noqa: E402
+    ^^^^^^^^^^^^^^
+ModuleNotFoundError: No module named 'uvicorn'

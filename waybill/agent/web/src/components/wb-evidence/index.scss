@@ -1,0 +1,21 @@
+// WbEvidence 的样式。全局类名，带 wb- 前缀。
+
+.wb-evidence {
+  width: 100%;
+}
+
+.wb-evidence-raw {
+  margin-bottom: 0;
+
+  pre {
+    margin: 0;
+    max-height: 320px;
+    overflow: auto;
+    padding: 12px;
+    background: #fafafa;
+    border: 1px solid var(--wb-border);
+    border-radius: 6px;
+    font-size: 12px;
+    line-height: 1.6;
+  }
+}

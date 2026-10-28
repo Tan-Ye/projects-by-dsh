@@ -1,0 +1,19 @@
+// 断点与公共 mixin。这个文件不产出任何 CSS，只被其他 scss @use。
+// 用法：@use '@/styles/mixins' as *;  然后 @include sm { ... }
+
+$sm: 768px;
+$lg: 1200px;
+
+// 小于 sm：窄屏
+@mixin sm {
+  @media (max-width: #{$sm - 1px}) {
+    @content;
+  }
+}
+
+// 大于等于 lg：宽屏
+@mixin lg {
+  @media (min-width: $lg) {
+    @content;
+  }
+}

@@ -1,0 +1,17 @@
+﻿Collecting jinja2
+ERROR: Could not install packages due to an OSError: [Errno 13] Permission denied: 'D:\\tasks\\projects-by-dsh\\waybill\\systems\\oa\\.tmp\\pip-unpack-ndp0sy9p\\jinja2-3.1.6-py3-none-any.whl.metadata'
+Consider using the `--user` option or check the permissions.
+System.Management.Automation.RemoteException
+System.Management.Automation.RemoteException
+[notice] A new release of pip is available: 26.2.1 -> 26.2.2
+[notice] To update, run: C:\Users\ty263\.dsh\dsh-runtimes\dsh-primary-runtime\dependencies\python\python.exe -m pip install --upgrade pip
+WARNING: Failed to remove contents in a temporary directory 'D:\tasks\projects-by-dsh\waybill\systems\oa\.tmp\pip-build-tracker-4o712znx'.
+You can safely remove it manually.
+WARNING: Failed to remove contents in a temporary directory 'D:\tasks\projects-by-dsh\waybill\systems\oa\.tmp\pip-target-kxoqfw8o'.
+You can safely remove it manually.
+WARNING: Failed to remove contents in a temporary directory 'D:\tasks\projects-by-dsh\waybill\systems\oa\.tmp\pip-unpack-ndp0sy9p'.
+You can safely remove it manually.
+WARNING: Failed to remove contents in a temporary directory 'D:\tasks\projects-by-dsh\waybill\systems\oa\.tmp\pip-ephem-wheel-cache-jtic1wz0'.
+You can safely remove it manually.
+WARNING: Failed to remove contents in a temporary directory 'D:\tasks\projects-by-dsh\waybill\systems\oa\.tmp\pip-install-48vbvahh'.
+You can safely remove it manually.

@@ -1,0 +1,40 @@
+// WbLayout 的样式。全局类名，带 wb- 前缀。
+
+.wb-layout {
+  min-height: 100vh;
+}
+
+.wb-layout-sider {
+  border-inline-end: 1px solid var(--wb-border);
+}
+
+.wb-layout-brand {
+  height: 56px;
+  display: flex;
+  align-items: center;
+  padding-inline: 24px;
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  color: var(--wb-text);
+}
+
+.wb-layout-header {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  height: 56px;
+  padding-inline: 24px;
+  background: var(--wb-surface);
+  border-block-end: 1px solid var(--wb-border);
+}
+
+.wb-layout-user {
+  display: flex;
+  align-items: center;
+}
+
+.wb-layout-content {
+  padding: 24px;
+  overflow: auto;
+}

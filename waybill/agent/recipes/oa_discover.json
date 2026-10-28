@@ -1,0 +1,47 @@
+{
+    "name": "oa_discover",
+    "version": 1,
+    "base_url": "http://127.0.0.1:8100",
+    "requires": [
+        "status",
+        "page"
+    ],
+    "steps": [
+        {
+            "seq": 1,
+            "intent": "打开待办列表（带筛选条件和页码）",
+            "action": "goto",
+            "url": "/todo?status={{status}}&page={{page}}"
+        },
+        {
+            "seq": 2,
+            "intent": "读取列表标题（里面有总条数）",
+            "action": "extract_text",
+            "target": {
+                "by": "css",
+                "value": "h2"
+            },
+            "as": "header"
+        },
+        {
+            "seq": 3,
+            "intent": "读取分页条（里面有总页数）",
+            "action": "extract_text",
+            "target": {
+                "by": "css",
+                "value": ".pager"
+            },
+            "as": "pager"
+        },
+        {
+            "seq": 4,
+            "intent": "读取待办表格",
+            "action": "extract_table",
+            "target": {
+                "by": "css",
+                "value": "table.grid"
+            },
+            "as": "rows"
+        }
+    ]
+}

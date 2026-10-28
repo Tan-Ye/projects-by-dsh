@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block title %}{{ doc.doc_no }} - 费用报销单{% endblock %}
+{% block content %}
+<div class="panel">
+  <h2>费用报销单</h2>
+  <table class="form">
+    <tr>
+      <td class="k">单&nbsp;&nbsp;&nbsp;&nbsp;号</td><td>{{ doc.doc_no }}</td>
+      <td class="k">申&nbsp;请&nbsp;人</td><td>{{ doc.applicant }}</td>
+    </tr>
+    <tr>
+      <td class="k">部&nbsp;&nbsp;&nbsp;&nbsp;门</td><td>{{ doc.department }}</td>
+      <td class="k">提交时间</td><td>{{ doc.submitted_at }}</td>
+    </tr>
+    <tr>
+      <td class="k">事&nbsp;&nbsp;&nbsp;&nbsp;由</td><td colspan="3">{{ doc.reason }}</td>
+    </tr>
+    <tr>
+      <td class="k">状&nbsp;&nbsp;&nbsp;&nbsp;态</td><td>{{ STATUS_TEXT[doc.status] }}</td>
+      <td class="k">附单据数</td><td>{{ atts|length }} 张</td>
+    </tr>
+    <tr>
+      <td class="k">合计金额</td><td colspan="3" class="total">{{ total_cents|yuan }}</td>
+    </tr>
+  </table>
+</div>
+
+<div class="panel">
+  <h2>报销明细 <a class="linkbtn" href="{{ detail_url }}">查看明细页</a></h2>
+  <iframe src="{{ detail_url }}" width="100%" height="330" frameborder="0" scrolling="no"></iframe>
+</div>
+
+<div class="panel">
+  <h2>审批意见</h2>
+  <table class="form">
+    <tr><td class="k">部门经理</td><td>情况属实，同意报销。<span class="muted">{{ approved_at }}</span></td></tr>
+  </table>
+</div>
+{% endblock %}

@@ -1,0 +1,21 @@
+// WbStatusTag 的样式。全局类名，带 wb- 前缀（公共组件禁止 CSS Module）。
+
+.wb-status-tag {
+  margin-inline-end: 0;
+
+  &.is-success {
+    color: var(--wb-ok);
+  }
+
+  &.is-warn {
+    color: var(--wb-warn);
+  }
+
+  &.is-error {
+    color: var(--wb-error);
+  }
+
+  &.is-idle {
+    color: var(--wb-idle);
+  }
+}

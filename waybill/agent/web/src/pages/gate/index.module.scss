@@ -1,0 +1,13 @@
+@use '@/styles/mixins' as *;
+
+.page {
+  @include stack(16px);
+}
+
+.card {
+  border: 1px solid var(--wb-border);
+}
+
+.link {
+  font-size: 12px;
+}

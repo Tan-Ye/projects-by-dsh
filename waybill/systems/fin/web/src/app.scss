@@ -1,0 +1,22 @@
+// 应用外壳的布局样式。类名带前缀且是全局的，可供页面穿透覆盖。
+
+.fin-layout {
+  min-height: 100%;
+}
+
+.fin-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #fff;
+  border-bottom: 1px solid #f0f0f0;
+  padding: 0 24px;
+
+  &__user {
+    color: var(--fin-text-secondary);
+  }
+}
+
+.fin-content {
+  min-height: calc(100vh - 64px);
+}

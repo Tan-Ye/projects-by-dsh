@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block title %}登录 - OA 协同办公系统{% endblock %}
+{% block content %}
+<div class="login-box">
+  <div class="login-title">OA 协同办公系统</div>
+  <form method="post" action="/login">
+    <input type="hidden" name="redirect" value="{{ redirect_to }}">
+    <table class="form">
+      <tr>
+        <td class="k">用户名</td>
+        <td><input type="text" name="username" size="22" autocomplete="off"></td>
+      </tr>
+      <tr>
+        <td class="k">密&nbsp;&nbsp;码</td>
+        <td><input type="password" name="password" size="22"></td>
+      </tr>
+      {% if error %}
+      <tr>
+        <td></td>
+        <td><span class="err">{{ error }}</span></td>
+      </tr>
+      {% endif %}
+      <tr>
+        <td></td>
+        <td><button type="submit">登 录</button></td>
+      </tr>
+    </table>
+  </form>
+  <div class="login-foot">建议使用 IE8 及以上浏览器访问</div>
+</div>
+{% endblock %}
