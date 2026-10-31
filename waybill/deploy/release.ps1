@@ -84,6 +84,8 @@ set -e
 mkdir -p $AppDir
 tar -xzf /tmp/waybill-release.tgz -C $AppDir
 chown -R waybill:waybill $AppDir
+# 依赖可能随代码变化：每次装一遍，已满足的会很快跳过
+$AppDir/.venv/bin/pip install -q -r $AppDir/requirements.txt
 systemctl restart waybill-oa waybill-fin waybill-agent
 sleep 2
 systemctl --no-pager --lines=0 is-active waybill-oa waybill-fin waybill-agent

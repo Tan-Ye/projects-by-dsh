@@ -12,6 +12,8 @@ WorkingDirectory=/opt/waybill/agent
 EnvironmentFile=/opt/waybill/agent/.env
 Environment=TZ=Asia/Shanghai
 Environment=PYTHONUNBUFFERED=1
+# 浏览器内核装在共享目录，root 和 waybill 都能用（见 setup-browser.sh）
+Environment=PLAYWRIGHT_BROWSERS_PATH=/opt/waybill/.pw-browsers
 ExecStart=/opt/waybill/.venv/bin/python main.py
 Restart=always
 RestartSec=3
