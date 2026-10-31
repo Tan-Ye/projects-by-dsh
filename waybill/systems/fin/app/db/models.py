@@ -5,7 +5,7 @@ SQLite 没有 boolean，布尔列在 Python 里就是 int（0/1），所以这�
 
 from __future__ import annotations
 
-from typing import TypedDict
+from typing_extensions import TypedDict
 
 
 class UserRow(TypedDict):

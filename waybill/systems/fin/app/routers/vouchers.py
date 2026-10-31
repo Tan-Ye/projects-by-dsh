@@ -17,7 +17,9 @@ from __future__ import annotations
 import asyncio
 import sqlite3
 from sqlite3 import Connection
-from typing import TypedDict, cast
+from typing import cast
+
+from typing_extensions import TypedDict
 
 from fastapi import APIRouter, Depends, Query, status
 from pydantic import BaseModel, Field

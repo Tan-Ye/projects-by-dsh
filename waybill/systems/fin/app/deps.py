@@ -13,7 +13,7 @@ from __future__ import annotations
 
 import time
 from sqlite3 import Connection
-from typing import TypedDict
+from typing_extensions import TypedDict
 
 from fastapi import Depends, Header
 
