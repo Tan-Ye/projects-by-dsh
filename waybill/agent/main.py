@@ -85,7 +85,7 @@ app.mount(
 )
 
 
-@app.get("/{path:path}", include_in_schema=False)
+@app.api_route("/{path:path}", methods=["GET", "HEAD"], include_in_schema=False)
 def spa(path: str) -> Response:
     """前端路由兜底：具体文件优先，其余交给 index.html。"""
     dist = config.WEB_DIST

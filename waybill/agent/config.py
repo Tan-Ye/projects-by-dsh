@@ -80,11 +80,23 @@ OA_PASSWORD = os.environ.get("OA_PASSWORD", "oa123456")
 # 评测旁路：只有评测脚本用，agent 主流程不碰这个接口
 FIN_ADMIN_TOKEN = os.environ.get("FIN_ADMIN_TOKEN", "dev-admin-token")
 
-# 控制台登录：内网自用，账号固定。
-# 上线前改成环境变量注入，并把 cookie 设为 secure。
+# 控制台登录：账号固定，口令优先从环境变量取。
+# 放在 .env 里而不是写死代码：发版覆盖的是代码，.env 不动，
+# 线上口令就不会因为一次重新部署被打回默认值。
+def _console_password(default: str, env_key: str) -> str:
+    value = os.environ.get(env_key, "").strip()
+    return value or default
+
+
 CONSOLE_USERS: dict[str, dict[str, str]] = {
-    "admin": {"password": "waybill2026", "display": "管理员"},
-    "auditor": {"password": "audit2026", "display": "审计员"},
+    "admin": {
+        "password": _console_password("waybill2026", "CONSOLE_ADMIN_PASSWORD"),
+        "display": "管理员",
+    },
+    "auditor": {
+        "password": _console_password("audit2026", "CONSOLE_AUDITOR_PASSWORD"),
+        "display": "审计员",
+    },
 }
 CONSOLE_SECRET = os.environ.get("CONSOLE_SECRET", "dev-only-secret-change-me")
 
@@ -128,7 +140,10 @@ def warn_insecure_defaults() -> list[str]:
     if CONSOLE_SECRET == "dev-only-secret-change-me":
         warnings.append("CONSOLE_SECRET 还是默认值：线上必须换成随机串")
     if any(user["password"].startswith(("waybill", "audit")) for user in CONSOLE_USERS.values()):
-        warnings.append("控制台账号还是演示口令：线上必须换掉")
+        warnings.append(
+            "控制台账号还是演示口令：在 agent/.env 里设 CONSOLE_ADMIN_PASSWORD /"
+            " CONSOLE_AUDITOR_PASSWORD（直接改 config.py 会在下次发版时被覆盖）"
+        )
     if FIN_ADMIN_TOKEN == "dev-admin-token":
         warnings.append("FIN_ADMIN_TOKEN 还是默认值：线上必须换掉")
     return warnings
