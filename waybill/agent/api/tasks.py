@@ -58,10 +58,18 @@ ORDER BY id DESC
 
 @router.get("")
 def list_tasks(
+    include_orphans: bool = False,
     conn: sqlite3.Connection = Depends(get_conn),
     username: str = Depends(auth.current_user),
 ) -> dict[str, object]:
+    """任务列表。
+
+    include_orphans：是否连"没有任务归属的运行"一起列。
+    单条调试（run_task）和评测（evaluate）产生的都是无主运行，
+    默认不显示——否则任务列表会被几十条评测记录淹掉。
+    """
     rows = [dict(row) for row in conn.execute(TASK_SQL)]
-    rows.extend(dict(row) for row in conn.execute(ORPHAN_SQL))
+    if include_orphans:
+        rows.extend(dict(row) for row in conn.execute(ORPHAN_SQL))
     rows.sort(key=lambda row: (row["run_id"] or 0), reverse=True)
     return {"items": rows, "total": len(rows)}

@@ -1,6 +1,6 @@
 /** 跨模块共用的类型。 */
 
-/** 任务与运行的终态。resolved = 人处理完了（agent 没跑成功，人接手）。 */
+/** 任务与运行的终态。resolved = 人处理完了；aborted = 服务重启导致批次作废。 */
 export type RunStatus =
   | 'pending'
   | 'running'
@@ -8,6 +8,7 @@ export type RunStatus =
   | 'waiting_human'
   | 'failed'
   | 'resolved'
+  | 'aborted'
 
 /** 步骤执行结果。 */
 export interface StepItem {

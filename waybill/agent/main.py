@@ -8,8 +8,8 @@ from __future__ import annotations
 from contextlib import asynccontextmanager
 from collections.abc import AsyncIterator
 
-from fastapi import FastAPI
-from fastapi.responses import FileResponse
+from fastapi import FastAPI, Response
+from fastapi.responses import FileResponse, PlainTextResponse
 from fastapi.staticfiles import StaticFiles
 from uvicorn import run as uvicorn_run
 
@@ -65,21 +65,35 @@ def health() -> dict[str, object]:
 
 
 # ---------------------------------------------------------------------------
-# 前端托管：只有构建过才挂。没有 dist 时访问页面会 404，但 API 照常可用。
+# 前端托管
+#
+# 路由在 import 时就注册好，不按"dist 存不存在"决定——否则前端重建之后
+# 必须重启服务才生效，部署时很容易踩"改了没生效"。
+# 目录不存在时 StaticFiles(check_dir=False) 不会报错，SPA 兜底返回 503 说清楚。
 # ---------------------------------------------------------------------------
 
-if config.WEB_DIST.is_dir():
-    assets = config.WEB_DIST / "assets"
-    if assets.is_dir():
-        app.mount("/assets", StaticFiles(directory=assets), name="assets")
+app.mount(
+    "/assets",
+    StaticFiles(directory=config.WEB_DIST / "assets", check_dir=False),
+    name="assets",
+)
 
-    @app.get("/{path:path}", include_in_schema=False)
-    def spa(path: str) -> FileResponse:
-        """前端路由兜底：具体文件优先，其余的交给 index.html。"""
-        candidate = config.WEB_DIST / path
-        if path and candidate.is_file():
-            return FileResponse(candidate)
-        return FileResponse(config.WEB_DIST / "index.html")
+
+@app.get("/{path:path}", include_in_schema=False)
+def spa(path: str) -> Response:
+    """前端路由兜底：具体文件优先，其余交给 index.html。"""
+    dist = config.WEB_DIST
+    candidate = dist / path
+    if path and candidate.is_file():
+        return FileResponse(candidate)
+
+    index = dist / "index.html"
+    if not index.is_file():
+        return PlainTextResponse(
+            "控制台前端还没构建：cd agent/web && pnpm build",
+            status_code=503,
+        )
+    return FileResponse(index)
 
 
 if __name__ == "__main__":

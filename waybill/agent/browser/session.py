@@ -38,12 +38,16 @@ class OaSession:
         self._browser: Browser | None = None
         self.page: Page | None = None
 
-    async def __aenter__(self) -> OaSession:
+    async def start(self) -> OaSession:
+        """打开浏览器和页面。async with 与手动调用都走这里。"""
         self._playwright = await async_playwright().start()
         self._browser = await self._playwright.chromium.launch(headless=self._headless)
         context = await self._browser.new_context()
         self.page = await context.new_page()
         return self
+
+    async def __aenter__(self) -> OaSession:
+        return await self.start()
 
     async def __aexit__(self, *_: object) -> None:
         await self.close()
@@ -86,7 +90,7 @@ class OaSession:
 
 async def open_session(username: str, password: str, *, headless: bool = False) -> OaSession:
     """开一个会话并登录好。调用方负责关闭。"""
-    session = await OaSession(headless=headless).__aenter__()
+    session = await OaSession(headless=headless).start()
     try:
         await session.login(username, password)
     except Exception:

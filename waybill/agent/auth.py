@@ -54,11 +54,15 @@ def verify_token(token: str | None) -> str | None:
 
 
 def check_credentials(username: str, password: str) -> str | None:
-    """校验账号口令，返回显示名；不通过返回 None。"""
+    """校验账号口令，返回显示名；不通过返回 None。
+
+    比的是字节不是字符串：hmac.compare_digest 对非 ASCII 的 str 会抛
+    TypeError，换成 utf-8 编码后中英文口令都能比。
+    """
     user = config.CONSOLE_USERS.get(username)
     if user is None:
         return None
-    if not hmac.compare_digest(user["password"], password):
+    if not hmac.compare_digest(user["password"].encode("utf-8"), password.encode("utf-8")):
         return None
     return user["display"]
 

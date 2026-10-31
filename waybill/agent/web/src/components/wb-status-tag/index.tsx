@@ -20,6 +20,7 @@ const MAP: Record<string, { text: string; color: string; tone: string }> = {
   waiting_human: { text: '待人工', color: 'warning', tone: 'warn' },
   failed: { text: '失败', color: 'error', tone: 'error' },
   resolved: { text: '已处理', color: 'default', tone: 'idle' },
+  aborted: { text: '已中止', color: 'default', tone: 'idle' },
   running: { text: '运行中', color: 'processing', tone: 'idle' },
   pending: { text: '排队中', color: 'default', tone: 'idle' },
 }

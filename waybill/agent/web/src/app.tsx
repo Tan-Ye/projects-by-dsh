@@ -4,7 +4,7 @@
 
 import { Spin } from 'antd'
 import { useEffect, useState } from 'react'
-import { Navigate, Route, Routes, useLocation, useNavigate } from 'react-router-dom'
+import { Navigate, Route, Routes, useNavigate } from 'react-router-dom'
 
 import { WbLayout } from '@/components/wb-layout'
 import { BatchPage } from '@/pages/batches'
@@ -22,21 +22,17 @@ import styles from './app.module.scss'
 
 export function App() {
   const navigate = useNavigate()
-  const location = useLocation()
   const [user, setUser] = useState<UserInfo | null>(null)
   const [ready, setReady] = useState(false)
 
   useEffect(() => {
-    // 登录页不探登录态：没登录时它必然 401，只会给控制台添一条红字
-    if (location.pathname === '/login') {
-      setReady(true)
-      return
-    }
+    // 只在启动时探一次登录态。以前依赖路径，每切一次页面就多一次请求。
+    // /api/auth/me 未登录时返回 200 + null，所以登录页也不会刷红字。
     me()
       .then(setUser)
       .catch(() => setUser(null))
       .finally(() => setReady(true))
-  }, [location.pathname])
+  }, [])
 
   useEffect(() => {
     function onUnauthorized() {

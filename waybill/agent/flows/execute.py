@@ -90,11 +90,15 @@ async def execute_task(
     recipe_name: str,
     inputs: dict[str, str],
     page: Page | None = None,
+    repair: RepairHook | None = None,
 ) -> tuple[str, str]:
     """跑一条任务，全程留痕。返回 (任务终态, 一句话结论)。
 
     page 不为空时在会话层已登录的页面上跑——登录只做一次，
     这一条任务从第一步业务动作开始。
+
+    repair 为空时自己建一个修复器（单条调试用）；批次会传一个共用的，
+    避免每单都新建一个模型客户端。
 
     配置错误（缺配方、缺参数）由 StepFailed 抛出，交给调用方决定
     标记成 failed 还是直接退出——worker 和 CLI 的处理不一样。
@@ -113,12 +117,16 @@ async def execute_task(
     # 配方快照：事后要能回答"这次用的是哪份配方"，光有版本号不够
     store.add_extraction(conn, run_id, "recipe", recipe)
 
-    hook, client = _build_repairer()
+    own_client: LlmClient | None = None
+    hook = repair
+    if hook is None:
+        hook, own_client = _build_repairer()
+
     try:
         run = await replay(recipe, steps, repair=hook, page=page)
     finally:
-        if client is not None:
-            await client.aclose()
+        if own_client is not None:
+            await own_client.aclose()
 
     store.add_steps(conn, run_id, list(run["steps"]))
     _record_repairs(conn, run_id, recipe["name"], run)

@@ -21,16 +21,26 @@ def gaps(
     conn: sqlite3.Connection = Depends(get_conn),
     username: str = Depends(auth.current_user),
 ) -> dict[str, object]:
+    # rationale 要取"最近一次"的：MAX(rationale) 是字典序，不是时间序，
+    # 那样页面上显示的可能是很早以前那条不相干的理由。
     rows = conn.execute(
-        "SELECT summary,"
+        "SELECT j.summary,"
         " COUNT(*) AS count,"
-        " MAX(created_at) AS last_at,"
-        " MAX(rationale) AS rationale,"
-        " MAX(reason) AS reason"
-        " FROM judgments WHERE accepted = 0"
-        " GROUP BY summary"
-        " ORDER BY count DESC, summary"
+        " MAX(j.created_at) AS last_at,"
+        " (SELECT j2.rationale FROM judgments j2"
+        "   WHERE j2.summary = j.summary AND j2.accepted = 0"
+        "   ORDER BY j2.id DESC LIMIT 1) AS rationale,"
+        " (SELECT j3.reason FROM judgments j3"
+        "   WHERE j3.summary = j.summary AND j3.accepted = 0"
+        "   ORDER BY j3.id DESC LIMIT 1) AS reason"
+        " FROM judgments j WHERE j.accepted = 0"
+        " GROUP BY j.summary"
+        " ORDER BY count DESC, j.summary"
     ).fetchall()
 
     items = [dict(row) for row in rows]
-    return {"items": items, "total": len(items), "affected": sum(item["count"] for item in items)}
+    return {
+        "items": items,
+        "total": len(items),
+        "affected": sum(int(item["count"]) for item in items),
+    }

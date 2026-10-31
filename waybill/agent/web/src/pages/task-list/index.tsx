@@ -32,13 +32,15 @@ export function TaskListPage() {
   const [error, setError] = useState('')
   const [keyword, setKeyword] = useState('')
   const [filter, setFilter] = useState<Filter>('全部')
+  const [showAll, setShowAll] = useState(false)
 
   useEffect(() => {
-    listTasks()
+    setLoading(true)
+    listTasks(showAll)
       .then((data) => setItems(data.items))
       .catch((exc: unknown) => setError(exc instanceof Error ? exc.message : '加载失败'))
       .finally(() => setLoading(false))
-  }, [])
+  }, [showAll])
 
   const rows = useMemo(() => {
     const status = FILTER_STATUS[filter]
@@ -98,6 +100,11 @@ export function TaskListPage() {
             value={keyword}
             onChange={(event) => setKeyword(event.target.value)}
             className={styles.search}
+          />
+          <Segmented
+            options={['业务任务', '全部运行']}
+            value={showAll ? '全部运行' : '业务任务'}
+            onChange={(value) => setShowAll(value === '全部运行')}
           />
           <Typography.Text type="secondary">共 {rows.length} 条</Typography.Text>
         </Space>

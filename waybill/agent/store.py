@@ -40,9 +40,13 @@ def connect() -> sqlite3.Connection:
     # check_same_thread=False：FastAPI 的同步依赖跑在线程池里，
     # 而 async 端点跑在事件循环线程里，同一个请求会跨线程用这个连接。
     # 每个请求各持一条连接，所以并发写不会被共享连接搅乱。
-    conn = sqlite3.connect(config.DB_PATH, check_same_thread=False)
+    conn = sqlite3.connect(config.DB_PATH, check_same_thread=False, timeout=5.0)
     conn.row_factory = sqlite3.Row
     conn.execute("PRAGMA foreign_keys = ON")
+    # WAL：批次在后台写库时，控制台的读请求不会互相阻塞
+    # busy_timeout：写锁冲突最多等 5 秒，而不是立刻抛 database is locked
+    conn.execute("PRAGMA journal_mode = WAL")
+    conn.execute("PRAGMA busy_timeout = 5000")
     return conn
 
 

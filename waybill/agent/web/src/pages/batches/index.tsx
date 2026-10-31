@@ -47,11 +47,11 @@ interface BatchForm {
 }
 
 // 批次状态和任务状态共用一套标签
-const BATCH_STATUS: Record<BatchStatus, 'running' | 'succeeded' | 'failed'> = {
+const BATCH_STATUS: Record<BatchStatus, 'running' | 'succeeded' | 'failed' | 'aborted'> = {
   running: 'running',
   succeeded: 'succeeded',
   failed: 'failed',
-  aborted: 'failed',
+  aborted: 'aborted',
 }
 
 const OUTCOME_TAG: Record<BatchOutcome, { color: string; text: string }> = {
@@ -106,15 +106,16 @@ export function BatchPage() {
       .catch(() => setStatuses([{ value: '', label: '全部' }]))
   }, [refresh])
 
-  // 有批次在跑就轮询，让页面跟上进度
+  // 有批次在跑就轮询。依赖用布尔值而不是数组：
+  // 数组每次刷新都是新引用，会让定时器每 2 秒被重建一次。
+  const hasRunning = batches.some((batch) => batch.status === 'running')
   useEffect(() => {
-    const running = batches.some((batch) => batch.status === 'running')
-    if (!running) return
+    if (!hasRunning) return
     const timer = window.setInterval(() => {
       void refresh()
     }, 2000)
     return () => window.clearInterval(timer)
-  }, [batches, refresh])
+  }, [hasRunning, refresh])
 
   function openStart() {
     const cached = readCachedForm()
