@@ -23,10 +23,10 @@ def main() -> None:
     if "--port" in sys.argv:
         port = int(sys.argv[sys.argv.index("--port") + 1])
 
-    print(f"财务仿真系统: http://127.0.0.1:{port}")
+    print(f"财务仿真系统: http://{config.BIND_HOST}:{port}")
     print(f"数据库: {config.DB_PATH}")
     print(f"校验延迟: {config.VALIDATE_DELAY_MS}ms")
-    uvicorn.run(app, host="127.0.0.1", port=port, log_level="info")
+    uvicorn.run(app, host=config.BIND_HOST, port=port, log_level="info")
 
 
 if __name__ == "__main__":

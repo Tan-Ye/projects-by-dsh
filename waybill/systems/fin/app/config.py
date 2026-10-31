@@ -27,6 +27,8 @@ def _load_dotenv(path: Path) -> None:
 _load_dotenv(BASE / ".env")
 
 PORT = int(os.environ.get("FIN_PORT", "8200"))
+# 反代部署时只监听回环；直接对外才改 0.0.0.0
+BIND_HOST = os.environ.get("FIN_BIND_HOST", "127.0.0.1")
 DB_PATH = Path(os.environ.get("FIN_DB") or (BASE / "fin.db"))
 VALIDATE_DELAY_MS = int(os.environ.get("FIN_VALIDATE_DELAY_MS", "800"))
 TOKEN_TTL = int(os.environ.get("FIN_TOKEN_TTL", "900"))

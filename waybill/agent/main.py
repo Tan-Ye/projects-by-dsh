@@ -36,6 +36,12 @@ async def lifespan(_: FastAPI) -> AsyncIterator[None]:
             print(f"[启动] 收掉 {aborted} 个未完成的批次")
     finally:
         conn.close()
+
+    # 敏感配置还在用默认值时喊一声：本地开发无所谓，线上是事故
+    for warning in config.warn_insecure_defaults():
+        print(f"[配置] {warning}")
+
+    print(f"[启动] http://{config.BIND_HOST}:{config.PORT}  无头浏览器={config.BROWSER_HEADLESS}")
     yield
 
 
@@ -97,4 +103,4 @@ def spa(path: str) -> Response:
 
 
 if __name__ == "__main__":
-    uvicorn_run(app, host="127.0.0.1", port=config.PORT)
+    uvicorn_run(app, host=config.BIND_HOST, port=config.PORT)

@@ -1,8 +1,8 @@
-"""停止两个仿真系统。"""
+﻿"""停止三个服务。"""
 
 $ErrorActionPreference = 'Continue'
 
-foreach ($name in @('.oa.pid', '.fin.pid')) {
+foreach ($name in @('.oa.pid', '.fin.pid', '.agent.pid')) {
     $file = Join-Path $PSScriptRoot $name
     if (-not (Test-Path $file)) { continue }
     $procId = [int](Get-Content $file -Raw).Trim()

@@ -1,0 +1,22 @@
+[Unit]
+Description=Waybill OA simulator (target system for the agent)
+After=network.target
+
+[Service]
+Type=simple
+User=waybill
+Group=waybill
+WorkingDirectory=/opt/waybill/systems/oa
+Environment=TZ=Asia/Shanghai
+Environment=PYTHONUNBUFFERED=1
+# 界面漂移档位：v1 / v2 / v3。切换后要重启本服务
+Environment=UI_VERSION=v1
+Environment=OA_BIND_HOST=127.0.0.1
+ExecStart=/opt/waybill/.venv/bin/python run.py
+Restart=always
+RestartSec=3
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target

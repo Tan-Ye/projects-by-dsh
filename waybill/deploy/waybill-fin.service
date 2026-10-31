@@ -1,0 +1,20 @@
+[Unit]
+Description=Waybill finance system (target system for the agent)
+After=network.target
+
+[Service]
+Type=simple
+User=waybill
+Group=waybill
+WorkingDirectory=/opt/waybill/systems/fin
+EnvironmentFile=/opt/waybill/systems/fin/.env
+Environment=TZ=Asia/Shanghai
+Environment=PYTHONUNBUFFERED=1
+ExecStart=/opt/waybill/.venv/bin/python run.py
+Restart=always
+RestartSec=3
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target

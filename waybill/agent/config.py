@@ -88,12 +88,50 @@ CONSOLE_USERS: dict[str, dict[str, str]] = {
 }
 CONSOLE_SECRET = os.environ.get("CONSOLE_SECRET", "dev-only-secret-change-me")
 
-# 控制台前端构建产物；存在就由 main.py 托管
+# 控制台前端构建产物；由 main.py 托管
 WEB_DIST = AGENT_DIR / "web" / "dist"
+
+# ---------------------------------------------------------------------------
+# 部署相关
+# ---------------------------------------------------------------------------
+
+# 企业内网/公网部署时用 nginx 反代，服务本身只监听本机回环
+BIND_HOST = os.environ.get("BIND_HOST", "127.0.0.1")
+
+# 浏览器是否无头。服务器没有桌面，必须是 1；
+# 本地调试想看着它跑，设成 0。
+BROWSER_HEADLESS = os.environ.get("BROWSER_HEADLESS", "1").strip().lower() not in (
+    "0",
+    "false",
+    "no",
+)
+
+# cookie 是否只在 HTTPS 下发送。上了证书再打开，否则 HTTP 下登录不了
+COOKIE_SECURE = os.environ.get("COOKIE_SECURE", "0").strip().lower() in (
+    "1",
+    "true",
+    "yes",
+)
 
 # LLM
 LLM_BASE_URL = os.environ.get("LLM_BASE_URL", "https://api.deepseek.com")
 LLM_MODEL = os.environ.get("LLM_MODEL", "deepseek-chat")
+
+
+def warn_insecure_defaults() -> list[str]:
+    """启动时检查还在用默认值的敏感配置。
+
+    不直接抛错：本地开发就需要这些默认值。但线上忘了改，
+    这里至少会在日志里喊一声。
+    """
+    warnings: list[str] = []
+    if CONSOLE_SECRET == "dev-only-secret-change-me":
+        warnings.append("CONSOLE_SECRET 还是默认值：线上必须换成随机串")
+    if any(user["password"].startswith(("waybill", "audit")) for user in CONSOLE_USERS.values()):
+        warnings.append("控制台账号还是演示口令：线上必须换掉")
+    if FIN_ADMIN_TOKEN == "dev-admin-token":
+        warnings.append("FIN_ADMIN_TOKEN 还是默认值：线上必须换掉")
+    return warnings
 
 
 def require_llm_key() -> str:

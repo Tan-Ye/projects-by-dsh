@@ -483,7 +483,8 @@ async def replay(
         return await replay_on(page, recipe, steps, repair)
 
     async with async_playwright() as p:
-        browser = await p.chromium.launch(headless=False)
+        # 服务器没有桌面，必须无头；本地想看它跑就设 BROWSER_HEADLESS=0
+        browser = await p.chromium.launch(headless=config.BROWSER_HEADLESS)
         own_page = await browser.new_page()
         try:
             return await replay_on(own_page, recipe, steps, repair)

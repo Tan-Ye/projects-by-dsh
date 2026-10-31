@@ -469,12 +469,14 @@ def main() -> None:
     port = PORT
     if "--port" in sys.argv:
         port = int(sys.argv[sys.argv.index("--port") + 1])
+    # 反代部署时只监听回环；直接对外才改 0.0.0.0
+    host = os.environ.get("OA_BIND_HOST", "127.0.0.1")
     try:
-        server = OAServer(("127.0.0.1", port), Handler)
+        server = OAServer((host, port), Handler)
     except OSError as exc:
         print(f"启动失败：端口 {port} 已被占用（{exc}）。换个端口或先停掉旧进程。", file=sys.stderr)
         raise SystemExit(1)
-    print(f"OA 仿真系统已启动: http://127.0.0.1:{port}  (ui={DEFAULT_UI}, session_ttl={SESSION_TTL}s)")
+    print(f"OA 仿真系统已启动: http://{host}:{port}  (ui={DEFAULT_UI}, session_ttl={SESSION_TTL}s)")
     print("账号: zhangwei / oa123456")
 
     # 记下 pid，方便 python run.py --stop 干净地停掉服务

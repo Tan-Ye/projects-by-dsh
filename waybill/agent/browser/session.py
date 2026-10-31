@@ -32,8 +32,9 @@ class SessionError(Exception):
 class OaSession:
     """持有浏览器和一个已登录的页面。用 async with 管生命周期。"""
 
-    def __init__(self, *, headless: bool = False) -> None:
-        self._headless = headless
+    def __init__(self, *, headless: bool | None = None) -> None:
+        # 默认跟配置走：服务器无头，本地可以设 BROWSER_HEADLESS=0 看着它跑
+        self._headless = config.BROWSER_HEADLESS if headless is None else headless
         self._playwright: Playwright | None = None
         self._browser: Browser | None = None
         self.page: Page | None = None
@@ -41,7 +42,18 @@ class OaSession:
     async def start(self) -> OaSession:
         """打开浏览器和页面。async with 与手动调用都走这里。"""
         self._playwright = await async_playwright().start()
-        self._browser = await self._playwright.chromium.launch(headless=self._headless)
+        try:
+            self._browser = await self._playwright.chromium.launch(headless=self._headless)
+        except Exception as exc:
+            # 服务器上最常见的原因是没装浏览器内核，报错原文很难懂
+            await self._playwright.stop()
+            self._playwright = None
+            raise SessionError(
+                "BROWSER_UNAVAILABLE",
+                "浏览器启动失败：先在服务器执行 "
+                "`python -m playwright install --with-deps chromium`。"
+                f"原始错误：{exc}",
+            ) from exc
         context = await self._browser.new_context()
         self.page = await context.new_page()
         return self

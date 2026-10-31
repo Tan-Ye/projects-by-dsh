@@ -1,8 +1,8 @@
-"""启动两个仿真系统（Windows）。
+﻿"""启动三个服务（Windows 本地开发）。
 
     powershell -ExecutionPolicy Bypass -File deploy\start_all.ps1
 
-两个服务都在独立进程里跑，脚本退出后仍然存活。停止用 stop_all.ps1。
+三个服务都在独立进程里跑，脚本退出后仍然存活。停止用 stop_all.ps1。
 """
 
 $ErrorActionPreference = 'Stop'
@@ -34,9 +34,17 @@ function Start-System([string]$name, [string]$script, [string]$port, [string]$pi
 $oa = Start-System 'OA  ' (Join-Path $root 'systems\oa\run.py') '8100' (Join-Path $PSScriptRoot '.oa.pid')
 $fin = Start-System '财务' (Join-Path $root 'systems\fin\run.py') '8200' (Join-Path $PSScriptRoot '.fin.pid')
 
+# 控制台：不带 --port 参数，端口从 agent/.env 的 AGENT_PORT 读
+$consoleArgs = $launcherArgs + @((Join-Path $root 'agent\main.py'))
+$console = Start-Process -FilePath $launcher -ArgumentList $consoleArgs -PassThru `
+    -WindowStyle Hidden -WorkingDirectory (Join-Path $root 'agent')
+$console.Id | Set-Content (Join-Path $PSScriptRoot '.agent.pid')
+Write-Host "控制台  http://127.0.0.1:8300   (PID $($console.Id))" -ForegroundColor Green
+
 Start-Sleep -Seconds 3
 
 Write-Host ''
 Write-Host '健康检查：'
 try { Invoke-RestMethod 'http://127.0.0.1:8100/health' | ConvertTo-Json -Compress } catch { "OA 未就绪：$($_.Exception.Message)" }
 try { Invoke-RestMethod 'http://127.0.0.1:8200/health' | ConvertTo-Json -Compress } catch { "财务未就绪：$($_.Exception.Message)" }
+try { Invoke-RestMethod 'http://127.0.0.1:8300/health' | ConvertTo-Json -Compress } catch { "控制台未就绪：$($_.Exception.Message)" }

@@ -1,0 +1,25 @@
+[Unit]
+Description=Waybill agent console (API + web)
+After=network.target
+# 两个目标系统是 agent 的下游，但不必强依赖：它们挂了 agent 也要能起来看报错
+Wants=waybill-oa.service waybill-fin.service
+
+[Service]
+Type=simple
+User=waybill
+Group=waybill
+WorkingDirectory=/opt/waybill/agent
+EnvironmentFile=/opt/waybill/agent/.env
+Environment=TZ=Asia/Shanghai
+Environment=PYTHONUNBUFFERED=1
+ExecStart=/opt/waybill/.venv/bin/python main.py
+Restart=always
+RestartSec=3
+StandardOutput=journal
+StandardError=journal
+
+# 浏览器进程需要 /dev/shm；容器化的机器上这个值常常太小
+PrivateTmp=false
+
+[Install]
+WantedBy=multi-user.target

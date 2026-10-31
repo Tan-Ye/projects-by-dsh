@@ -27,6 +27,8 @@ def login(payload: LoginRequest, response: Response) -> dict[str, str]:
         auth.issue_token(payload.username),
         httponly=True,
         samesite="lax",
+        # 上了 HTTPS 再打开 COOKIE_SECURE；HTTP 下打开会直接登录不了
+        secure=config.COOKIE_SECURE,
         max_age=auth.SESSION_TTL,
         path="/",
     )
