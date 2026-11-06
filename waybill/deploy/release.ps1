@@ -22,29 +22,42 @@ function Fail([string]$message) {
 
 # ---------------------------------------------------------------- 构建前端
 
-Write-Host '== 1/4 构建控制台前端 ==' -ForegroundColor Cyan
-$webDir = Join-Path $root 'agent\web'
-if (-not (Test-Path (Join-Path $webDir 'node_modules'))) {
-    Fail 'agent\web\node_modules 不存在，先在该目录执行 pnpm install'
-}
+Write-Host '== 1/4 构建前端（控制台 + 财务） ==' -ForegroundColor Cyan
 
 if (-not $Pnpm) {
     $cmd = Get-Command pnpm -ErrorAction SilentlyContinue
     if ($cmd) { $Pnpm = $cmd.Source }
 }
 
-Push-Location $webDir
-try {
-    if ($Pnpm) {
-        & $Pnpm build
-    } else {
-        # 没有独立 pnpm 时退回 corepack
-        & corepack pnpm build
+function Invoke-FrontendBuild([string]$relativeDir) {
+    $full = Join-Path $root $relativeDir
+    if (-not (Test-Path (Join-Path $full 'node_modules'))) {
+        Fail "$relativeDir\node_modules 不存在，先在该目录执行 pnpm install"
     }
-    if ($LASTEXITCODE -ne 0) { Fail '前端构建失败' }
-} finally {
-    Pop-Location
+
+    Write-Host "  构建 $relativeDir" -ForegroundColor DarkGray
+    Push-Location $full
+    try {
+        if ($Pnpm -and $Pnpm -like '*.mjs') {
+            # pnpm 是裸 .mjs 时要显式用 node 跑（DSH 自带运行时就是这种）
+            $node = Get-Command node -ErrorAction SilentlyContinue
+            if (-not $node) { Fail '找不到 node，无法执行 pnpm.mjs' }
+            & $node.Source $Pnpm build
+        } elseif ($Pnpm) {
+            & $Pnpm build
+        } else {
+            # 没有独立 pnpm 时退回 corepack
+            & corepack pnpm build
+        }
+        if ($LASTEXITCODE -ne 0) { Fail "$relativeDir 构建失败" }
+    } finally {
+        Pop-Location
+    }
 }
+
+# 两个前端都要构建：少构建一个，线上就是"前端还没构建"的占位页
+Invoke-FrontendBuild 'agent\web'
+Invoke-FrontendBuild 'systems\fin\web'
 
 # ---------------------------------------------------------------- 打包
 

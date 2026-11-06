@@ -91,10 +91,10 @@ ssh root@<IP> "bash /tmp/setup-server.sh"
 powershell -ExecutionPolicy Bypass -File deploy\release.ps1 -Server root@<IP>
 ```
 
-本地先 `pnpm build` 控制台前端，再打包上传、解压、`pip install`、重启服务。
+本地先构建**两个前端**（`agent/web` 控制台 + `systems/fin/web` 财务），再打包上传、解压、`pip install`、重启服务。
 **不会覆盖** `.env`、`*.db`、`logs/`——重复发版不冲掉线上配置和数据。
 
-> pnpm 不在 PATH 上时补 `-Pnpm "完整路径\pnpm.cmd"`。
+> pnpm 不在 PATH 上时补 `-Pnpm "完整路径\pnpm.cmd"` 或 `-Pnpm "…\pnpm.mjs"`（脚本会自动用 node 跑）。
 
 ## 步骤 3：浏览器内核（只需一次）
 
@@ -190,7 +190,7 @@ powershell -ExecutionPolicy Bypass -File deploy\release.ps1 -Server root@<IP>
 | 批次能启动但登录失败 | 确认 OA 在跑：`curl -I http://127.0.0.1:8100/login` |
 | 页面能开，接口 404 | nginx 没配 `/api/`，或 `BIND_HOST` 改成了 0.0.0.0 但端口没放行 |
 | 登录后立刻被踢回登录页 | `COOKIE_SECURE=1` 但还在用 HTTP |
-| 打开页面提示"前端还没构建" | 发版时 `pnpm build` 失败，或包没传上去 |
+| 打开页面提示"前端还没构建" | 发版时对应前端（控制台 / 财务）没构建或包没传上去；`fin` 还需要重启服务才挂载静态目录 |
 
 ## 已知限制
 
